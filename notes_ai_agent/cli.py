@@ -16,6 +16,7 @@ import logging
 import sys
 
 from notes_ai_agent.config import agent_config as config
+from notes_ai_agent.config import cli_config
 from notes_ai_agent.llm import driver_manager as llm_driver_manager
 
 logger = logging.getLogger(__name__)
@@ -24,9 +25,10 @@ logger = logging.getLogger(__name__)
 def main():
     # TODO: add config file path here, it should be taken
     # from the argparse
-    user_config_file = None
-    if user_config_file:
-        config.set_user_config_file(user_config_file)
+    cli_prog = cli_config.get_cli_program()
+    cli_arguments = cli_prog.parse_args()
+    if cli_arguments.config_file:
+        config.set_user_config_file(cli_arguments.config_file)
     cfg = config.get_config()
 
     llm_driver_name = cfg['DEFAULT']['llm_driver']

@@ -17,7 +17,9 @@ from pathlib import Path
 
 _CONF = None
 
-_USER_CONFIG_FILE = f"{Path.home()}/.config/notes_ai_agent.conf"
+
+_DEFAULT_USER_CONFIG_FILE = f"{Path.home()}/.config/notes_ai_agent.conf"
+_USER_CONFIG_FILE = _DEFAULT_USER_CONFIG_FILE
 
 DEFAULT_CONFIG = {
     'DEFAULT': {
