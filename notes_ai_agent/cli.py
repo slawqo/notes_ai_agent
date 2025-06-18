@@ -1,0 +1,39 @@
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+import logging
+import sys
+
+from notes_ai_agent.config import agent_config as config
+from notes_ai_agent.llm import driver_manager as llm_driver_manager
+
+logger = logging.getLogger(__name__)
+
+
+def main():
+    # TODO: add config file path here, it should be taken
+    # from the argparse
+    user_config_file = None
+    if user_config_file:
+        config.set_user_config_file(user_config_file)
+    cfg = config.get_config()
+
+    llm_driver_name = cfg['DEFAULT']['llm_driver']
+    if not llm_driver_name:
+        logging.error("'llm_driver' has to be specified")
+        sys.exit(1)
+
+    llm_driver_manager.load_driver(llm_driver_name)
+    llm_driver = llm_driver_manager.get_loaded_driver()
+    llm_driver.send_prompt("Test prompt")
