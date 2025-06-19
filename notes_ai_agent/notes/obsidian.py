@@ -37,7 +37,7 @@ class ObsidianNote(base.BaseNote):
                 )
                 self._note['content'] = note_content_splitted[2]
             else:
-                self._note['metadata'] = None
+                self._note['metadata'] = {}
                 self._note['content'] = note_content
         
         self._note_loaded = True

@@ -21,8 +21,8 @@ class BaseNote(ABC):
         self.file_path = file_path
         self._note_loaded = False
         self._note = {
-            "metadata": None,
-            "content": None
+            "metadata": {},
+            "content": ""
         }
 
     @abstractmethod
