@@ -11,21 +11,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from stevedore.driver import DriverManager
 
-from notes_ai_agent.common import driver_manager as common_driver_manager
-
-
-_DRIVER = None
-
-def load_driver(driver_name: str) -> None:
-    global _DRIVER
-    if not _DRIVER:
-        _DRIVER = common_driver_manager.load_driver(
-            driver_name,
-            'notes_ai_agent.llm_drivers'
-        )
-        _DRIVER.initialize()
+from notes_ai_agent.llm import base_driver
 
 
-def get_loaded_driver():
-    return _DRIVER
+
+def load_driver(driver_name: str, namespace: str, **driver_kwargs) -> None:
+    mgr = DriverManager(
+        namespace=namespace,
+        name=driver_name,
+        invoke_on_load=True,
+        invoke_kwds=driver_kwargs,
+    )
+    return mgr.driver
