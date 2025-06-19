@@ -18,6 +18,7 @@ import sys
 from notes_ai_agent.config import agent_config as config
 from notes_ai_agent.config import cli_config
 from notes_ai_agent.llm import driver_manager as llm_driver_manager
+from notes_ai_agent.notes import driver_manager as notes_driver_manager
 
 logger = logging.getLogger(__name__)
 
@@ -38,4 +39,9 @@ def main():
 
     llm_driver_manager.load_driver(llm_driver_name)
     llm_driver = llm_driver_manager.get_loaded_driver()
-    llm_driver.send_prompt("Test prompt")
+
+    note_driver = notes_driver_manager.load_driver(
+        cfg['DEFAULT']['notes_driver'],
+        file_path=cli_arguments.filepath
+    )
+    note_driver = notes_driver_manager.get_loaded_driver()
