@@ -12,11 +12,15 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from abc import ABC, abstractmethod
+import hashlib
 import typing
+import yaml
+
+from notes_ai_agent.notes import constants
 
 
 class BaseNote(ABC):
-    
+
     def __init__(self, file_path: str) -> None:
         self.file_path = file_path
         self._note_loaded = False
@@ -26,20 +30,39 @@ class BaseNote(ABC):
         }
 
     @abstractmethod
-    def _load_note(self) -> None:
+    def _load(self) -> None:
         pass
 
-    def get_note_content(self) -> str:
-        self._load_note()
+    def get_content(self) -> str:
+        self._load()
         return self._note['content']
 
-    def get_note_metadata(self) -> dict:
-        self._load_note()
-        return self._note['metadata']
+    def get_metadata(self) -> dict:
+        self._load()
+        return self._note['metadata'] or {}
 
     def add_metadata(self, key: str,
                      value: typing.Union[str, list]) -> None:
-        pass
+        self._note['metadata'][key] = value
 
-    def safe_note(self) -> None:
-        pass
+    def processing_forbidden(self):
+        return self.get_metadata().get(constants.LLM_FORBIDDEN_KEY, False)
+
+    def content_changed(self):
+        content_md5 = self._get_content_md5()
+        previous_content_md5 = \
+            self.get_metadata().get(constants.CONTENT_MD5_KEY)
+        return content_md5 != previous_content_md5
+
+    def _get_content_md5(self):
+        return hashlib.md5(
+            self.get_content().encode('utf-8')).hexdigest()
+
+    def save(self) -> None:
+        content_md5 = self._get_content_md5()
+        self.add_metadata(constants.CONTENT_MD5_KEY, content_md5)
+        note_metadata = yaml.safe_dump(
+            self.get_metadata(), allow_unicode=True)
+        full_note_str = f"---\n{note_metadata}\n---\n{self.get_content()}"
+        with open(self.file_path, "w", encoding='utf-8') as note_file:
+            note_file.write(full_note_str)

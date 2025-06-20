@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 class ObsidianNote(base.BaseNote):
 
-    def _load_note(self) -> None:
+    def _load(self) -> None:
         if self._note_loaded:
             return
 
@@ -33,11 +33,10 @@ class ObsidianNote(base.BaseNote):
                 note_content_splitted = note_content.split(
                     '---\n', 2)
                 self._note['metadata'] = yaml.safe_load(
-                    note_content_splitted[1]
-                )
+                    note_content_splitted[1]) or {}
                 self._note['content'] = note_content_splitted[2]
             else:
                 self._note['metadata'] = {}
                 self._note['content'] = note_content
-        
+
         self._note_loaded = True
