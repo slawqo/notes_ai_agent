@@ -29,6 +29,9 @@ def main():
     # from the argparse
     cli_prog = cli_config.get_cli_program()
     cli_arguments = cli_prog.parse_args()
+    if cli_arguments.verbose:
+        logging.basicConfig(level=logging.DEBUG)
+
     if cli_arguments.config_file:
         config.set_user_config_file(cli_arguments.config_file)
     cfg = config.get_config()

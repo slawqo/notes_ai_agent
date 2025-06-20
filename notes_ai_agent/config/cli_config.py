@@ -29,4 +29,6 @@ def get_cli_program():
     parser.add_argument('filepath')
     parser.add_argument('-c', '--config-file',
                         default=agent_config._DEFAULT_USER_CONFIG_FILE)
+    parser.add_argument('-v', '--verbose',
+                        action='store_true')
     return parser
