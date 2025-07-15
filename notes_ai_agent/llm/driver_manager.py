@@ -13,6 +13,7 @@
 
 
 from notes_ai_agent.common import driver_manager as common_driver_manager
+from notes_ai_agent.llm import base_driver
 
 
 _DRIVER = None
@@ -27,5 +28,5 @@ def load_driver(driver_name: str) -> None:
         _DRIVER.initialize()
 
 
-def get_loaded_driver():
+def get_loaded_driver() -> base_driver.BaseLLMDriver:
     return _DRIVER
