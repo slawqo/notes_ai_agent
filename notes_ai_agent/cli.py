@@ -58,8 +58,8 @@ def main():
 
     new_note_metadata = llm_driver.process_note(note)
     note.add_metadata(
-        notes_constants.KEYWORDS_KEY,
-        new_note_metadata['keywords']
+        notes_constants.TAGS_KEY,
+        new_note_metadata['tags']
     )
     if new_note_metadata.get('summary'):
         note.add_metadata(

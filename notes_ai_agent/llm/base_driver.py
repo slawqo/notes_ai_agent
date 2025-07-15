@@ -12,8 +12,10 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from abc import ABC, abstractmethod
+import os
 import typing
 
+from notes_ai_agent.config import agent_config as config
 from notes_ai_agent.llm import system_prompts
 from notes_ai_agent.notes import base as base_notes_driver
 
@@ -25,16 +27,34 @@ class BaseLLMDriver(ABC):
         pass
 
     @abstractmethod
-    def send_prompt(self,
-                    user_prompt: str,
-                    system_prompt: typing.Union[str, None] = None):
+    def send_prompt(
+            self,
+            user_prompt: str,
+            system_prompt: typing.Union[str, None] = None) -> dict:
         pass
 
+    def get_known_tags(self) -> set[str]:
+        tags_file = config.get_config()['DEFAULT']['local_tags_file']
+        if not os.path.exists(tags_file):
+            return set()
+        with open(tags_file, 'r') as file:
+            return set(file.read().splitlines())
+
+    def save_tags(self, tags: set[str]) -> None:
+        tags_file = config.get_config()['DEFAULT']['local_tags_file']
+        with open(tags_file, 'w') as file:
+            file.write('\n'.join(tags))
+
     def process_note(self, note_driver: base_notes_driver.BaseNote) -> dict:
-        system_prompt = system_prompts.GET_KEYWORDS_MSG.format(
-            keywords=note_driver.get_metadata().get('keywords', '')
+        current_tags = self.get_known_tags()
+        current_tags.add(note_driver.get_metadata().get('tags', ''))
+        system_prompt = system_prompts.GET_TAGS_MSG.format(
+            tags=current_tags
         )
-        return self.send_prompt(
+        llm_response = self.send_prompt(
             note_driver.get_content(),
             system_prompt
         )
+        current_tags.update(llm_response['tags'])
+        self.save_tags(current_tags)
+        return llm_response

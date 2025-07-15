@@ -12,7 +12,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 CONTENT_MD5_KEY = "content_md5"
-KEYWORDS_KEY = "keywords"
+TAGS_KEY = "tags"
 SUMMARY_KEY = "summary"
 
 LLM_FORBIDDEN_KEY = "llm_forbidden"

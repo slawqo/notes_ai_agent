@@ -41,6 +41,11 @@ class BaseNote(ABC):
         self._load()
         return self._note['metadata'] or {}
 
+    def get_tags(self) -> set[str]:
+        tags = self.get_metadata().get(
+            constants.TAGS_KEY, '').split(",")
+        return {tag.strip() for tag in tags if tag.strip()}
+
     def add_metadata(self, key: str,
                      value: typing.Union[str, list]) -> None:
         self._note['metadata'][key] = value

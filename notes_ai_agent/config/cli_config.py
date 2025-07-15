@@ -22,7 +22,7 @@ def get_cli_program():
             'This is small AI Agent whose only goal '
             'is to parse given markdown document, send '
             'it to the configured LLM model to get '
-            'keywords and summary and update it in the '
+            'tags and summary and update it in the '
             'markdown tags section.'
         )
     )

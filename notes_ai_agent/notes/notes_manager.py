@@ -13,11 +13,12 @@
 
 
 from notes_ai_agent.common import driver_manager as common_driver_manager
+from notes_ai_agent.notes import base as base_notes_driver
 
 
 _DRIVER = None
 
-def load_note(driver_name: str, **driver_kwargs) -> BaseNote:
+def load_note(driver_name: str, **driver_kwargs) -> base_notes_driver.BaseNote:
     global _DRIVER
     if not _DRIVER:
         _DRIVER = common_driver_manager.load_driver(

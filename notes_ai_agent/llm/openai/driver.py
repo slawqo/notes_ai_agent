@@ -52,7 +52,8 @@ class LLMDriver(base_driver.BaseLLMDriver):
 
     def send_prompt(self,
                     user_prompt: str,
-                    system_prompt: typing.Union[str, None] = None):
+                    system_prompt: typing.Union[str, None] = None
+                ) -> dict:
         logger.debug(f"Sending usert prompt: '{user_prompt}' to "
                      f"OpenAI LLM model {self.model}")
 
