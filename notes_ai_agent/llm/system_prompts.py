@@ -21,6 +21,8 @@ GET_TAGS_MSG = """
     - List of tags should have 5 tags at most,
     - All tags should be in lower case,
     - All tags should be in singular, denominal form,
+    - All tags should be in English language only, even if the note is in other
+      language,
     - Current tags are provided in the <tags></tags> tag in this message,
     - If any of the provided tags are relevant to the note, you should always
       include them at first place,
