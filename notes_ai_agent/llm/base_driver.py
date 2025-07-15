@@ -47,7 +47,7 @@ class BaseLLMDriver(ABC):
 
     def process_note(self, note_driver: base_notes_driver.BaseNote) -> dict:
         current_tags = self.get_known_tags()
-        current_tags.add(note_driver.get_metadata().get('tags', ''))
+        current_tags.update(note_driver.get_tags())
         system_prompt = system_prompts.GET_TAGS_MSG.format(
             tags=current_tags
         )

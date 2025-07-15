@@ -43,7 +43,7 @@ class BaseNote(ABC):
 
     def get_tags(self) -> set[str]:
         tags = self.get_metadata().get(
-            constants.TAGS_KEY, '').split(",")
+            constants.TAGS_KEY, [])
         return {tag.strip() for tag in tags if tag.strip()}
 
     def add_metadata(self, key: str,
