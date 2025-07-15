@@ -25,8 +25,6 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    # TODO: add config file path here, it should be taken
-    # from the argparse
     cli_prog = cli_config.get_cli_program()
     cli_arguments = cli_prog.parse_args()
     if cli_arguments.verbose:
