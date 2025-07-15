@@ -17,6 +17,7 @@ import sys
 
 from notes_ai_agent.config import agent_config as config
 from notes_ai_agent.config import cli_config
+from notes_ai_agent.db import driver_manager as db_driver_manager
 from notes_ai_agent.llm import driver_manager as llm_driver_manager
 from notes_ai_agent.notes import constants as notes_constants
 from notes_ai_agent.notes import notes_manager
@@ -58,7 +59,11 @@ def main():
                     "has not changed. No processing needed.")
         sys.exit(0)
 
-    new_note_metadata = llm_driver.process_note(note)
+    db_driver_manager.load_driver(cfg['DEFAULT']['db_driver'])
+    db_driver = db_driver_manager.get_loaded_driver()
+    all_keywords = db_driver.get_all_keywords()
+
+    new_note_metadata = llm_driver.process_note(note, all_keywords)
     note.add_metadata(
         notes_constants.KEYWORDS_KEY,
         new_note_metadata['keywords']

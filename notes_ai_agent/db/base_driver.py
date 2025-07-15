@@ -14,31 +14,21 @@
 from abc import ABC, abstractmethod
 import typing
 
-from notes_ai_agent.llm import system_prompts
-from notes_ai_agent.notes import base as base_notes_driver
 
-
-class BaseLLMDriver(ABC):
+class BaseDBDriver(ABC):
 
     @abstractmethod
     def initialize(self):
         pass
 
     @abstractmethod
-    def send_prompt(self,
-                    user_prompt: str,
-                    system_prompt: typing.Union[str, None] = None):
+    def add_keywords(self, document_path: str, keywords: set[str]) -> None:
         pass
 
-    def process_note(self, note_driver: base_notes_driver.BaseNote,
-                     existing_keywords: set[str]) -> dict:
-        note_keywords = note_driver.get_keywords()
-        all_keywords = existing_keywords | note_keywords
+    @abstractmethod
+    def get_all_keywords(self) -> set[str]:
+        pass
 
-        system_prompt = system_prompts.GET_KEYWORDS_MSG.format(
-            keywords=", ".join(all_keywords)
-        )
-        return self.send_prompt(
-            note_driver.get_content(),
-            system_prompt
-        )
+    @abstractmethod
+    def get_document_keywords(self, document_path: str) -> set[str]:
+        pass

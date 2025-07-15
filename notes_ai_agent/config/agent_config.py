@@ -24,7 +24,8 @@ _USER_CONFIG_FILE = _DEFAULT_USER_CONFIG_FILE
 DEFAULT_CONFIG = {
     'DEFAULT': {
         'llm_driver': '',  # This is mandatory to be set in the config file
-        'notes_driver': 'obsidian'
+        'notes_driver': 'obsidian',
+        'db_driver': 'sqlite',
     },
 }
 
