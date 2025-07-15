@@ -12,34 +12,19 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from abc import ABC, abstractmethod
-import os
 import typing
 
-from notes_ai_agent.llm import system_prompts
-from notes_ai_agent.notes import base as base_notes_driver
 
-
-class BaseLLMDriver(ABC):
+class BaseDBDriver(ABC):
 
     @abstractmethod
     def initialize(self):
         pass
 
     @abstractmethod
-    def send_prompt(
-            self,
-            user_prompt: str,
-            system_prompt: typing.Union[str, None] = None) -> dict:
+    def save_tags(self, tags: set[str]) -> None:
         pass
 
-    def process_note(self, note: base_notes_driver.BaseNote,
-                     existing_tags: set[str]) -> dict:
-        existing_tags.update(note.get_tags())
-        system_prompt = system_prompts.GET_TAGS_MSG.format(
-            tags="\n".join(existing_tags)
-        )
-        llm_response = self.send_prompt(
-            note.get_content(),
-            system_prompt
-        )
-        return llm_response
+    @abstractmethod
+    def get_tags(self) -> set[str]:
+        pass

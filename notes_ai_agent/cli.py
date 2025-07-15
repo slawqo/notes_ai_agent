@@ -17,6 +17,7 @@ import sys
 
 from notes_ai_agent.config import agent_config as config
 from notes_ai_agent.config import cli_config
+from notes_ai_agent.db import driver_manager as db_driver_manager
 from notes_ai_agent.llm import driver_manager as llm_driver_manager
 from notes_ai_agent.notes import constants as notes_constants
 from notes_ai_agent.notes import notes_manager
@@ -42,6 +43,10 @@ def main():
     llm_driver_manager.load_driver(llm_driver_name)
     llm_driver = llm_driver_manager.get_loaded_driver()
 
+    db_driver_manager.load_driver(cfg['DEFAULT']['db_driver'])
+    db_driver = db_driver_manager.get_loaded_driver()
+    existing_tags = db_driver.get_tags()
+
     note = notes_manager.load_note(
         cfg['DEFAULT']['notes_driver'],
         file_path=cli_arguments.filepath
@@ -54,9 +59,11 @@ def main():
     if not note.content_changed():
         logger.info(f"Content of the note {cli_arguments.filepath} "
                     "has not changed. No processing needed.")
+        existing_tags.update(note.get_tags())
+        db_driver.save_tags(existing_tags)
         sys.exit(0)
 
-    new_note_metadata = llm_driver.process_note(note)
+    new_note_metadata = llm_driver.process_note(note, existing_tags)
     note.add_metadata(
         notes_constants.TAGS_KEY,
         new_note_metadata['tags']
@@ -67,3 +74,5 @@ def main():
             new_note_metadata['summary']
         )
     note.save()
+    existing_tags.update(new_note_metadata['tags'])
+    db_driver.save_tags(existing_tags)
