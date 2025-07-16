@@ -23,6 +23,8 @@ GET_TAGS_MSG = """
     - All tags should be in singular, denominal form,
     - All tags should be in English language only, even if the note is in other
       language,
+    - If tag contains more than one word, it should use underscore to separate
+      words, e.g. "this_is_a_tag",
     - Current tags are provided in the <tags></tags> tag in this message,
     - If any of the provided tags are relevant to the note, you should always
       include them at first place,
