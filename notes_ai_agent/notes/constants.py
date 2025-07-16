@@ -15,4 +15,4 @@ CONTENT_MD5_KEY = "content_md5"
 TAGS_KEY = "tags"
 SUMMARY_KEY = "summary"
 
-LLM_FORBIDDEN_KEY = "llm_forbidden"
+LLM_FORBIDDEN_KEY = "llm_processing_forbidden"
