@@ -12,14 +12,23 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
+import sys
 import yaml
 
+from notes_ai_agent.common import constants
 from notes_ai_agent.notes import base
 
 logger = logging.getLogger(__name__)
 
 
 class ObsidianNote(base.BaseNote):
+
+    def _load_metadata_from_yaml(self, yaml_str: str) -> dict:
+        try:
+            return yaml.safe_load(yaml_str) or {}
+        except yaml.YAMLError as e:
+            logger.error(f"Error loading metadata from YAML: {e}")
+            sys.exit(constants.EXIT_CODE_YAML_ERROR)
 
     def _load(self) -> None:
         if self._note_loaded:
@@ -32,8 +41,8 @@ class ObsidianNote(base.BaseNote):
                 # it has metadata section added by Obsidian
                 note_content_splitted = note_content.split(
                     '---\n', 2)
-                self._note['metadata'] = yaml.safe_load(
-                    note_content_splitted[1]) or {}
+                self._note['metadata'] = self._load_metadata_from_yaml(
+                    note_content_splitted[1])
                 self._note['content'] = note_content_splitted[2]
             else:
                 self._note['metadata'] = {}
