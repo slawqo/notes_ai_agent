@@ -15,6 +15,7 @@
 import logging
 import sys
 
+from notes_ai_agent.common import constants
 from notes_ai_agent.config import agent_config as config
 from notes_ai_agent.config import cli_config
 from notes_ai_agent.db import driver_manager as db_driver_manager
@@ -38,7 +39,7 @@ def main():
     llm_driver_name = cfg['DEFAULT']['llm_driver']
     if not llm_driver_name:
         logging.error("'llm_driver' has to be specified")
-        sys.exit(1)
+        sys.exit(constants.EXIT_CODE_NO_LLM_DRIVER_CONFIGURED)
 
     llm_driver_manager.load_driver(llm_driver_name)
     llm_driver = llm_driver_manager.get_loaded_driver()
@@ -54,14 +55,14 @@ def main():
     if note.processing_forbidden():
         logger.info(f"Processing of the note {cli_arguments.filepath} "
                     "by the LLM is not allowed.")
-        sys.exit(0)
+        sys.exit(constants.EXIT_CODE_OK)
 
     if not note.content_changed():
         logger.info(f"Content of the note {cli_arguments.filepath} "
                     "has not changed. No processing needed.")
         existing_tags.update(note.get_tags())
         db_driver.save_tags(existing_tags)
-        sys.exit(0)
+        sys.exit(constants.EXIT_CODE_OK)
 
     new_note_metadata = llm_driver.process_note(note, existing_tags)
     note.add_metadata(
