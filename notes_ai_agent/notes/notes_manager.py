@@ -18,6 +18,7 @@ from notes_ai_agent.notes import base as base_notes_driver
 
 _DRIVER = None
 
+
 def load_note(driver_name: str, **driver_kwargs) -> base_notes_driver.BaseNote:
     global _DRIVER
     if not _DRIVER:

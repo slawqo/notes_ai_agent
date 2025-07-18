@@ -11,8 +11,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from abc import ABC, abstractmethod
-import os
+from abc import ABC
+from abc import abstractmethod
 import typing
 
 from notes_ai_agent.llm import system_prompts

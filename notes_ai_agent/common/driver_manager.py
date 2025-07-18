@@ -13,9 +13,6 @@
 
 from stevedore.driver import DriverManager
 
-from notes_ai_agent.llm import base_driver
-
-
 
 def load_driver(driver_name: str, namespace: str, **driver_kwargs) -> None:
     mgr = DriverManager(

@@ -30,6 +30,7 @@ DRIVER_CONFIG = {
     },
 }
 
+
 class LLMDriver(base_driver.BaseLLMDriver):
 
     def initialize(self) -> None:
@@ -41,7 +42,7 @@ class LLMDriver(base_driver.BaseLLMDriver):
         if not self.api_key:
             logger.error("API Key for the OpenAI API is required.")
             raise exceptions.InvalidDriverConfiguration()
-    
+
     @property
     def client(self):
         if not self._client:
@@ -53,7 +54,7 @@ class LLMDriver(base_driver.BaseLLMDriver):
     def send_prompt(self,
                     user_prompt: str,
                     system_prompt: typing.Union[str, None] = None
-                ) -> dict:
+                    ) -> dict:
         logger.debug(f"Sending usert prompt: '{user_prompt}' to "
                      f"OpenAI LLM model {self.model}")
 

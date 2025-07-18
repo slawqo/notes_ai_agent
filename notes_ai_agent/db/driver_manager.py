@@ -18,6 +18,7 @@ from notes_ai_agent.db import base_driver
 
 _DRIVER = None
 
+
 def load_driver(driver_name: str) -> None:
     global _DRIVER
     if not _DRIVER:
