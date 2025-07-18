@@ -30,11 +30,6 @@ DEFAULT_CONFIG = {
 }
 
 
-def _get_config() -> configparser.ConfigParser:
-    init()
-    return _CONF
-
-
 def _set_configuration_values(configuration_values: dict) -> None:
     global _CONF
     init()
